@@ -28,8 +28,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/nvidia-sphinx-theme.css?v=933278ad" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
 
 
@@ -52,7 +52,7 @@
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'data_assets';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://nvlabs.github.io/SOMA-X/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -732,12 +732,12 @@ non-Python consumer plan.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMPL/</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SMPLIdentityModel</span></code> (type <code class="docutils literal notranslate"><span class="pre">smpl</span></code>)</p></td>
 <td><p>– (see below)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">base_body.obj</span></code> + <code class="docutils literal notranslate"><span class="pre">SOMA_wrap.obj</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">base_body.obj</span></code> + <code class="docutils literal notranslate"><span class="pre">SOMA_wrap.obj</span></code> <strong>(not distributed, see note)</strong></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMPLX/</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SMPLIdentityModel</span></code> (type <code class="docutils literal notranslate"><span class="pre">smplx</span></code>)</p></td>
 <td><p>– (see below)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">base_body.obj</span></code> + <code class="docutils literal notranslate"><span class="pre">SOMA_wrap.obj</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">base_body.obj</span></code> + <code class="docutils literal notranslate"><span class="pre">SOMA_wrap.obj</span></code> <strong>(not distributed, see note)</strong></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Anny/</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">AnnyIdentityModel</span></code></p></td>
@@ -752,6 +752,20 @@ non-Python consumer plan.</p>
 </tbody>
 </table>
 </div>
+<blockquote>
+<div><p><strong>SMPL and SMPL-X assets are not distributed.</strong> As of the <code class="docutils literal notranslate"><span class="pre">assets-v0.1.0-dev.1</span></code> release the
+five files under <code class="docutils literal notranslate"><span class="pre">assets/SMPL/</span></code> and <code class="docutils literal notranslate"><span class="pre">assets/SMPLX/</span></code> are excluded: SMPL-X is non-commercial
+only (<code class="docutils literal notranslate"><span class="pre">anny/AGENTS.md</span></code>), which fails the licence bar applied to every other asset here.</p>
+<p>This changes the failure message and not the reachable behaviour. Every code path that loads
+those meshes also needs <code class="docutils literal notranslate"><span class="pre">SMPL_NEUTRAL.pkl</span></code> or <code class="docutils literal notranslate"><span class="pre">SMPLX_NEUTRAL.npz</span></code>, which are gated behind
+<code class="docutils literal notranslate"><span class="pre">smpl.is.tue.mpg.de</span></code> and have never shipped in this repository — <code class="docutils literal notranslate"><span class="pre">_resolve_model_path</span></code> raises
+on the gated model before any excluded mesh is opened. Anyone who could run these paths was
+already supplying their own gated weights, and can supply the meshes the same way via
+<code class="docutils literal notranslate"><span class="pre">--data-root</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tools/smpl2soma.py</span></code> was the one exception: it read <code class="docutils literal notranslate"><span class="pre">smpl_anim.npy</span></code> directly before building
+any model, so it failed on the wrong file. It now preflights both and names the licence
+boundary.</p>
+</div></blockquote>
 </section>
 <section id="optional-user-placed-model-files">
 <h3>Optional user-placed model files<a class="headerlink" href="#optional-user-placed-model-files" title="Link to this heading">#</a></h3>
@@ -871,8 +885,8 @@ python<span class="w"> </span>tools/convert_gm_pca_to_npz.py<span class="w"> </s
   
 
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
 
   <footer class="bd-footer">
